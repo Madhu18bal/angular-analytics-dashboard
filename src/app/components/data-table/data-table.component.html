@@ -1,0 +1,37 @@
+<div class="panel">
+  <h2>Recent Transactions</h2>
+  <div class="table-controls">
+    <input placeholder="Search customer..." [(ngModel)]="search" />
+    <select [(ngModel)]="statusFilter">
+      <option value="All">All statuses</option>
+      <option value="Completed">Completed</option>
+      <option value="Pending">Pending</option>
+      <option value="Failed">Failed</option>
+    </select>
+  </div>
+  <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th (click)="toggleSort('customer')">Customer</th>
+          <th (click)="toggleSort('product')">Product</th>
+          <th (click)="toggleSort('amount')">Amount</th>
+          <th (click)="toggleSort('status')">Status</th>
+          <th (click)="toggleSort('date')">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of filtered">
+          <td>{{ t.customer }}</td>
+          <td>{{ t.product }}</td>
+          <td>${{ t.amount }}</td>
+          <td><span class="status-badge" [ngClass]="'status-' + t.status">{{ t.status }}</span></td>
+          <td>{{ t.date }}</td>
+        </tr>
+        <tr *ngIf="filtered.length === 0">
+          <td colspan="5" style="text-align:center; padding:20px;">No matching transactions.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
