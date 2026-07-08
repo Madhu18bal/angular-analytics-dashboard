@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, delay, catchError, throwError } from 'rxjs';
 
 export interface Summary {
   totalSales: number;
@@ -32,14 +30,11 @@ export interface DashboardData {
 
 @Injectable({ providedIn: 'root' })
 export class DataService {
-  constructor(private http: HttpClient) {}
-
-  // Swap this URL for a public dummy API (e.g. JSONPlaceholder) or a real
-  // backend endpoint when moving beyond mock data.
-  getDashboardData(): Observable<DashboardData> {
-    return this.http.get<DashboardData>('assets/mock-data.json').pipe(
-      delay(600), // simulate network latency so loading state is visible
-      catchError((err) => throwError(() => new Error('Failed to load dashboard data')))
-    );
+  async getDashboardData(): Promise<DashboardData> {
+    const res = await fetch('assets/mock-data.json');
+    if (!res.ok) {
+      throw new Error(`Failed to load dashboard data: ${res.status}`);
+    }
+    return res.json();
   }
 }
