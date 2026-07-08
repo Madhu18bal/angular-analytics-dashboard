@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { ApplicationRef, Component, OnInit } from '@angular/core';
 import { DashboardData, DataService } from './services/data.service';
 
 @Component({
@@ -9,7 +9,7 @@ export class AppComponent implements OnInit {
   status: 'loading' | 'success' | 'error' = 'loading';
   data: DashboardData | null = null;
 
-  constructor(private dataService: DataService, private ngZone: NgZone) {}
+  constructor(private dataService: DataService, private appRef: ApplicationRef) {}
 
   ngOnInit(): void {
     this.load();
@@ -20,16 +20,13 @@ export class AppComponent implements OnInit {
     this.data = null;
     try {
       const result = await this.dataService.getDashboardData();
-      document.title = 'DATA-OK-' + Date.now();
-      this.ngZone.run(() => {
-        this.data = result;
-        this.status = 'success';
-      });
-    } catch (err) {
-      document.title = 'DATA-ERR-' + Date.now();
-      this.ngZone.run(() => {
-        this.status = 'error';
-      });
+      this.data = result;
+      this.status = 'success';
+      document.title = 'RENDER-TICK-' + Date.now();
+      this.appRef.tick();
+    } catch {
+      this.status = 'error';
+      this.appRef.tick();
     }
   }
 }
