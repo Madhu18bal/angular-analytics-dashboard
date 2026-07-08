@@ -1,20 +1,20 @@
-<div class="dashboard">
+<div class="dashboard" *ngIf="vm$ | async as vm">
   <div class="dashboard-header">
     <h1>Analytics Dashboard</h1>
     <p>Sample sales, users, and traffic overview (Angular)</p>
   </div>
 
-  <div class="state-message" *ngIf="state === 'loading'">
+  <div class="state-message" *ngIf="vm.status === 'loading'">
     <div class="spinner"></div>
     Loading dashboard data...
   </div>
 
-  <div class="state-message" *ngIf="state === 'error'">
+  <div class="state-message" *ngIf="vm.status === 'error'">
     <p>⚠️ Something went wrong while loading data.</p>
-    <button (click)="load()" style="padding:8px 16px; cursor:pointer;">Retry</button>
+    <button (click)="retry()" style="padding:8px 16px; cursor:pointer;">Retry</button>
   </div>
 
-  <ng-container *ngIf="state === 'success' && data">
+  <ng-container *ngIf="vm.status === 'success' && vm.data as data">
     <app-summary-cards [summary]="data.summary"></app-summary-cards>
     <app-sales-chart [data]="data.monthlySales"></app-sales-chart>
     <app-data-table [transactions]="data.transactions"></app-data-table>

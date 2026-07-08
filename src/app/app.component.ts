@@ -1,37 +1,31 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { catchError, map, startWith } from 'rxjs/operators';
 import { DashboardData, DataService } from './services/data.service';
 
-type ViewState = 'loading' | 'success' | 'error';
+interface ViewModel {
+  status: 'loading' | 'success' | 'error';
+  data: DashboardData | null;
+}
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent implements OnInit {
-  data: DashboardData | null = null;
-  state: ViewState = 'loading';
+export class AppComponent {
+  vm$: Observable<ViewModel> = this.buildStream();
 
-  constructor(private dataService: DataService, private cdr: ChangeDetectorRef) {}
+  constructor(private dataService: DataService) {}
 
-  ngOnInit(): void {
-    this.load();
+  retry(): void {
+    this.vm$ = this.buildStream();
   }
 
-  load(): void {
-    this.state = 'loading';
-    console.log('[dashboard] fetching data...');
-    this.dataService.getDashboardData().subscribe({
-      next: (res) => {
-        console.log('[dashboard] data received', res);
-        this.data = res;
-        this.state = 'success';
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('[dashboard] error loading data', err);
-        this.state = 'error';
-        this.cdr.detectChanges();
-      }
-    });
+  private buildStream(): Observable<ViewModel> {
+    return this.dataService.getDashboardData().pipe(
+      map((data) => ({ status: 'success' as const, data })),
+      catchError(() => [{ status: 'error' as const, data: null }]),
+      startWith({ status: 'loading' as const, data: null })
+    );
   }
 }
