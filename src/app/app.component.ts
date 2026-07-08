@@ -13,9 +13,11 @@ interface ViewModel {
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  vm$: Observable<ViewModel> = this.buildStream();
+  vm$: Observable<ViewModel>;
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService) {
+    this.vm$ = this.buildStream();
+  }
 
   retry(): void {
     this.vm$ = this.buildStream();
