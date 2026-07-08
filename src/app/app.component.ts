@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DashboardData, DataService } from './services/data.service';
 
 type ViewState = 'loading' | 'success' | 'error';
@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
   data: DashboardData | null = null;
   state: ViewState = 'loading';
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.load();
@@ -19,13 +19,18 @@ export class AppComponent implements OnInit {
 
   load(): void {
     this.state = 'loading';
+    console.log('[dashboard] fetching data...');
     this.dataService.getDashboardData().subscribe({
       next: (res) => {
+        console.log('[dashboard] data received', res);
         this.data = res;
         this.state = 'success';
+        this.cdr.detectChanges();
       },
-      error: () => {
+      error: (err) => {
+        console.error('[dashboard] error loading data', err);
         this.state = 'error';
+        this.cdr.detectChanges();
       }
     });
   }
