@@ -4,7 +4,7 @@ import { DashboardData, DataService } from './services/data.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html'
-})
+})as
 export class AppComponent implements OnInit {
   status: 'loading' | 'success' | 'error' = 'loading';
   data: DashboardData | null = null;
@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
     this.load();
   }
 
-  load() {
+  async load() {
   this.status = 'loading';
 	
   try {
