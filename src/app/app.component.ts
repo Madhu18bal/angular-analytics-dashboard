@@ -22,9 +22,7 @@ export class AppComponent implements OnInit {
       const result = await this.dataService.getDashboardData();
       this.data = result;
        this.status = 'success';
-      document.title = 'RENDER-TICK-' + Date.now();
       this.appRef.tick();
-      // Diagnostic: bypass Angular entirely and manipulate the DOM directly
       const spinner = document.querySelector('.state-message') as HTMLElement | null;
       if (spinner) {
         spinner.textContent = 'DIRECT-DOM-BYPASS-WORKED';
@@ -34,5 +32,6 @@ export class AppComponent implements OnInit {
       this.status = 'error';
       this.appRef.tick();
     }
+cosole.log('data',this.data);
   }
 }
