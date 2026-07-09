@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
 
   async load() {
   this.status = 'loading';
-	console.log('loading',this.status);
+	
   try {
     this.data = await this.dataService.getDashboardData();
     this.status = 'success';

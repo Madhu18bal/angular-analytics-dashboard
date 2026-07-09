@@ -37,8 +37,8 @@ export class DataService {
 
   constructor(private http: HttpClient) {}
 
-  async getDashboardData(): Promise<DashboardData> {
-    return await firstValueFrom(
+  getDashboardData(): Promise<DashboardData> {
+    return firstValueFrom(
       this.http.get<DashboardData>('assets/mock-data.json')
     );
   }
