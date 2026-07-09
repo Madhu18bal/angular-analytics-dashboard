@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
     this.load();
   }
 
-  async load() {
+  load() {
   this.status = 'loading';
 	
   try {
