@@ -1,13 +1,15 @@
-import { ApplicationRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DashboardData, DataService } from './services/data.service';
+
+type ViewState = 'loading' | 'success' | 'error';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html'
-})as
+})
 export class AppComponent implements OnInit {
-  status: 'loading' | 'success' | 'error' = 'loading';
   data: DashboardData | null = null;
+  state: ViewState = 'loading';
 
   constructor(private dataService: DataService) {}
 
@@ -15,15 +17,16 @@ export class AppComponent implements OnInit {
     this.load();
   }
 
-  async load() {
-  this.status = 'loading';
-	
-  try {
-    this.data = await this.dataService.getDashboardData();
-    this.status = 'success';
-  } catch (e) {
-    console.error(e);
-    this.status = 'error';
+  load(): void {
+    this.state = 'loading';
+    this.dataService.getDashboardData().subscribe({
+      next: (res) => {
+        this.data = res;
+        this.state = 'success';
+      },
+      error: () => {
+        this.state = 'error';
+      }
+    });
   }
-}
 }

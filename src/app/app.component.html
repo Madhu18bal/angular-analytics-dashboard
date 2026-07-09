@@ -4,17 +4,17 @@
     <p>Sample sales, users, and traffic overview (Angular)</p>
   </div>
 
-  <div class="state-message" *ngIf="status === 'loading'">
+  <div class="state-message" *ngIf="state === 'loading'">
     <div class="spinner"></div>
     Loading dashboard data...
   </div>
 
-  <div class="state-message" *ngIf="status === 'error'">
+  <div class="state-message" *ngIf="state === 'error'">
     <p>⚠️ Something went wrong while loading data.</p>
     <button (click)="load()" style="padding:8px 16px; cursor:pointer;">Retry</button>
   </div>
 
-  <ng-container *ngIf="status === 'success' && data">
+  <ng-container *ngIf="state === 'success' && data">
     <app-summary-cards [summary]="data.summary"></app-summary-cards>
     <app-sales-chart [data]="data.monthlySales"></app-sales-chart>
     <app-data-table [transactions]="data.transactions"></app-data-table>
