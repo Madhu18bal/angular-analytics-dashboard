@@ -18,13 +18,14 @@ export class AppComponent implements OnInit {
   async load(): Promise<void> {
     this.status = 'loading';
     this.data = null;
+
+console.log('Null?',this.data);
     try {
       const result = await this.dataService.getDashboardData();
       this.data = result;
+console.log(this.data);
        this.status = 'success';
-      document.title = 'RENDER-TICK-' + Date.now();
       this.appRef.tick();
-      // Diagnostic: bypass Angular entirely and manipulate the DOM directly
       const spinner = document.querySelector('.state-message') as HTMLElement | null;
       if (spinner) {
         spinner.textContent = 'DIRECT-DOM-BYPASS-WORKED';
