@@ -21,9 +21,15 @@ export class AppComponent implements OnInit {
     try {
       const result = await this.dataService.getDashboardData();
       this.data = result;
-      this.status = 'success';
+       this.status = 'success';
       document.title = 'RENDER-TICK-' + Date.now();
       this.appRef.tick();
+      // Diagnostic: bypass Angular entirely and manipulate the DOM directly
+      const spinner = document.querySelector('.state-message') as HTMLElement | null;
+      if (spinner) {
+        spinner.textContent = 'DIRECT-DOM-BYPASS-WORKED';
+        spinner.style.background = 'yellow';
+      }
     } catch {
       this.status = 'error';
       this.appRef.tick();
