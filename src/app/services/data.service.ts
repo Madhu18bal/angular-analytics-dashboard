@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
 export interface Summary {
   totalSales: number;
@@ -28,13 +30,16 @@ export interface DashboardData {
   transactions: Transaction[];
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class DataService {
+
+  constructor(private http: HttpClient) {}
+
   async getDashboardData(): Promise<DashboardData> {
-    const res = await fetch('assets/mock-data.json');
-    if (!res.ok) {
-      throw new Error(`Failed to load dashboard data: ${res.status}`);
-    }
-    return res.json();
+    return await firstValueFrom(
+      this.http.get<DashboardData>('assets/mock-data.json')
+    );
   }
 }
