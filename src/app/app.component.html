@@ -17,5 +17,6 @@
   <ng-container *ngIf="status === 'success' && data">
     <app-summary-cards [summary]="data.summary"></app-summary-cards>
     <app-data-table [transactions]="data.transactions"></app-data-table>
+	<app-sales-chart [data]="data.monthlySales"></app-sales-chart>
   </ng-container>
 </div>
