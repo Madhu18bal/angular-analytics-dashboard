@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   }
 
   async load(): Promise<void> {
-    this.status = 'loading';
+    this.status = 'success';
     this.data = null;
 
 console.log('Null?',this.data);
