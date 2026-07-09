@@ -15,25 +15,15 @@ export class AppComponent implements OnInit {
     this.load();
   }
 
-async load(): Promise<void> {
-  console.log("Load started");
-
-  this.status = "loading";
+  async load() {
+  this.status = 'loading';
 
   try {
-    const result = await this.dataService.getDashboardData();
-
-    console.log("Data received", result);
-
-    this.data = result;
-
-    this.status = "success";
-
-    console.log("Status changed to", this.status);
-
+    this.data = await this.dataService.getDashboardData();
+    this.status = 'success';
   } catch (e) {
-    console.error("Error:", e);
-    this.status = "error";
+    console.error(e);
+    this.status = 'error';
   }
 }
 }

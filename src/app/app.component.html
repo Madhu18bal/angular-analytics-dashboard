@@ -1,10 +1,22 @@
-<h1>Angular Test</h1>
+<div class="dashboard">
+  <div class="dashboard-header">
+    <h1>Analytics Dashboard</h1>
+    <p>Sample sales, users, and traffic overview (Angular)</p>
+  </div>
 
-<p>Status: {{ status }}</p>
+  <div class="state-message" *ngIf="status === 'loading'">
+    <div class="spinner"></div>
+    Loading dashboard data...inside loading part
+  </div>
 
-<p *ngIf="data">Data Loaded Successfully</p>
+  <div class="state-message" *ngIf="status === 'error'">
+    <p>⚠️ Something went wrong while loading data.</p>
+    <button (click)="load()" style="padding:8px 16px; cursor:pointer;">Retry</button>
+  </div>
 
-<button (click)="load()">Reload</button>
-
-
-
+  <ng-container *ngIf="status === 'success' && data">
+    <app-summary-cards [summary]="data.summary"></app-summary-cards>
+    <app-sales-chart [data]="data.monthlySales"></app-sales-chart>
+    <app-data-table [transactions]="data.transactions"></app-data-table>
+  </ng-container>
+</div>
